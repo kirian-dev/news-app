@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"news-app/internal/domain"
+	"github.com/kir/news-app/internal/domain"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

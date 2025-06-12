@@ -2,7 +2,8 @@ package post
 
 import (
 	"context"
-	"news-app/internal/domain"
+
+	"github.com/kir/news-app/internal/domain"
 )
 
 // MockRepository is a mock implementation of domain.Repository

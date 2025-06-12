@@ -1,4 +1,4 @@
-module news-app
+module github.com/kir/news-app
 
 go 1.23.0
 

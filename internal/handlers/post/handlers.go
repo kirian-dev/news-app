@@ -3,8 +3,9 @@ package post
 import (
 	"html/template"
 	"net/http"
-	"news-app/internal/domain"
 	"strconv"
+
+	"github.com/kir/news-app/internal/domain"
 
 	"github.com/go-chi/chi/v5"
 	"go.uber.org/zap"

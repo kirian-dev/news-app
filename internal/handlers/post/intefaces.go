@@ -3,7 +3,7 @@ package post
 import (
 	"context"
 
-	"news-app/internal/domain"
+	"github.com/kir/news-app/internal/domain"
 )
 
 type PostService interface {

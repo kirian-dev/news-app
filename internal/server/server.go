@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"time"
 
-	"news-app/pkg/config"
-	"news-app/pkg/mongo"
+	"github.com/kir/news-app/pkg/config"
+	"github.com/kir/news-app/pkg/mongo"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"

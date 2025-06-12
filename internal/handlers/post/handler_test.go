@@ -6,9 +6,10 @@ import (
 	"html/template"
 	"net/http"
 	"net/http/httptest"
-	"news-app/internal/domain"
 	"strconv"
 	"testing"
+
+	"github.com/kir/news-app/internal/domain"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/stretchr/testify/assert"

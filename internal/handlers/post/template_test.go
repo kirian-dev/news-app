@@ -3,8 +3,9 @@ package post
 import (
 	"bytes"
 	"html/template"
-	"news-app/internal/domain"
 	"testing"
+
+	"github.com/kir/news-app/internal/domain"
 
 	"github.com/stretchr/testify/assert"
 	"go.mongodb.org/mongo-driver/bson/primitive"

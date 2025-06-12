@@ -2,9 +2,10 @@ package server
 
 import (
 	"html/template"
-	posthandler "news-app/internal/handlers/post"
-	postrepo "news-app/internal/repository/post"
-	postservice "news-app/internal/services/post"
+
+	posthandler "github.com/kir/news-app/internal/handlers/post"
+	postrepo "github.com/kir/news-app/internal/repository/post"
+	postservice "github.com/kir/news-app/internal/services/post"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"

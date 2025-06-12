@@ -3,7 +3,8 @@ package post
 import (
 	"context"
 	"fmt"
-	"news-app/internal/domain"
+
+	"github.com/kir/news-app/internal/domain"
 )
 
 type Service struct {

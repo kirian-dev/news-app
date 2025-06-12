@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"news-app/internal/domain"
+	"github.com/kir/news-app/internal/domain"
 
 	"github.com/ory/dockertest/v3"
 	"github.com/ory/dockertest/v3/docker"

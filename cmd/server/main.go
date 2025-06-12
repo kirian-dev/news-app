@@ -6,10 +6,11 @@ import (
 	"os/signal"
 	"syscall"
 
-	"news-app/internal/server"
-	"news-app/pkg/config"
-	"news-app/pkg/logger"
-	"news-app/pkg/mongo"
+	"github.com/kir/news-app/internal/server"
+
+	"github.com/kir/news-app/pkg/config"
+	"github.com/kir/news-app/pkg/logger"
+	"github.com/kir/news-app/pkg/mongo"
 
 	"go.uber.org/zap"
 )

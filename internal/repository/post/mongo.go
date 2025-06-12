@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"news-app/internal/domain"
+	"github.com/kir/news-app/internal/domain"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
