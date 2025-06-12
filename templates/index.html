@@ -1,0 +1,218 @@
+{{define "index"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Portal</title>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        [id$="-modal"] {
+            transition: opacity 0.2s ease-in-out;
+        }
+        [id$="-modal"] .modal-content {
+            transition: transform 0.2s ease-in-out;
+        }
+        [id$="-modal"]:not(.hidden) .modal-content {
+            transform: translateY(0);
+        }
+        [id$="-modal"].opacity-0 .modal-content {
+            transform: translateY(-10px);
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#fdf2f8',
+                            100: '#fce7f3',
+                            200: '#fbcfe8',
+                            300: '#f9a8d4',
+                            400: '#f472b6',
+                            500: '#ec4899',
+                            600: '#db2777',
+                            700: '#be185d',
+                            800: '#9d174d',
+                            900: '#831843',
+                        },
+                        success: {
+                            500: '#22c55e',
+                            600: '#16a34a',
+                        }
+                    }
+                }
+            }
+        };
+
+        function toggleModal(id, show) {
+            const modal = document.getElementById(id);
+            if (!modal) {
+                console.warn(`Modal with id "${id}" not found`);
+                return;
+            }
+
+            if (show) {
+                modal.classList.remove('hidden');
+            } else {
+                modal.classList.add('hidden');
+                const form = modal.querySelector('form');
+                if (form) {
+                    form.reset();
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const successMsg = sessionStorage.getItem('successToaster');
+            if (successMsg) {
+                showToaster(successMsg, true);
+                sessionStorage.removeItem('successToaster');
+            }
+            document.body.addEventListener('htmx:afterRequest', function(evt) {
+                if (!evt.detail.successful) {
+                    const errorMsg = evt.detail.xhr.getResponseHeader('HX-Error-Message');
+                    if (errorMsg) {
+                        showToaster(errorMsg, false);
+                    }
+                    return;
+                }
+
+                const method = evt.detail.requestConfig.verb;
+                if (method && ['post', 'put', 'delete'].includes(method)) {
+                    const modalMap = {
+                        'create-form-content': 'create-modal',
+                        'edit-form-content': 'edit-modal',
+                        'delete-form-content': 'delete-modal'
+                    };
+                    if (modalMap[evt.detail.target.id]) {
+                        toggleModal(modalMap[evt.detail.target.id], false);
+                        const triggers = evt.detail.xhr.getResponseHeader('HX-Trigger');
+                        if (triggers) {
+                            if (triggers.includes('postCreated')) {
+                                sessionStorage.setItem('successToaster', 'Post successfully created!');
+                            } else if (triggers.includes('postUpdated')) {
+                                sessionStorage.setItem('successToaster', 'Post successfully updated!');
+                            } else if (triggers.includes('postDeleted')) {
+                                sessionStorage.setItem('successToaster', 'Post successfully deleted!');
+                            }
+                        }
+                        window.location.href = '/';
+                    }
+                }
+            });
+        });
+
+        function showToaster(message, success = false) {
+            const toaster = document.getElementById('toaster');
+            const msg = document.getElementById('toaster-message');
+            const content = document.getElementById('toaster-content');
+            msg.textContent = message;
+            if (success) {
+                content.classList.remove('bg-red-500');
+                content.classList.add('bg-success-500');
+            } else {
+                content.classList.remove('bg-success-500');
+                content.classList.add('bg-red-500');
+            }
+            toaster.classList.remove('hidden');
+            setTimeout(() => {
+                toaster.classList.add('hidden');
+            }, 4000);
+        }
+    </script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Toaster -->
+    <div id="toaster" class="fixed top-6 right-6 z-50 hidden">
+        <div id="toaster-content" class="bg-red-500 text-white px-6 py-4 rounded-lg shadow-lg flex items-center gap-3">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+            <span id="toaster-message"></span>
+        </div>
+    </div>
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-gray-100">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <h1 class="text-3xl font-bold bg-gradient-to-r from-primary-600 to-primary-400 bg-clip-text text-transparent">
+                    News Portal
+                </h1>
+                <button 
+                    onclick="toggleModal('create-modal', true)"
+                    class="px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-all duration-200 shadow-sm hover:shadow-md">
+                    Create Post
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <div class="flex gap-8 md:flex-row flex-col-reverse">
+            <!-- Main Column -->
+            <div class="flex-1">
+                <!-- Search -->
+                <div class="mb-6">
+                    <form hx-get="/"
+                          hx-target="#posts-list"
+                          hx-push-url="true"
+                          hx-replace-url="true"
+                          class="flex gap-4">
+                        <input type="text" 
+                               name="search" 
+                               value="{{.Search}}"
+                               placeholder="Search by title or content..."
+                               class="flex-1 px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                        <button type="submit" 
+                                class="px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2">
+                            Search
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Posts List -->
+                <div class="space-y-6">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">Latest Posts</h2>
+                    <div id="posts-list">
+                        {{template "post/posts-list" .}}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar with Recent Posts -->
+            <div class="md:w-80 w-full">
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Recent Posts</h3>
+                    <div class="space-y-4">
+                        {{range .RecentPosts}}
+                        <div class="border-b border-gray-100 pb-4 last:border-0">
+                            <h4 class="font-medium text-gray-800 mb-2">{{.Title}}</h4>
+                            <p class="text-sm text-gray-500">{{.CreatedAt.Format "02.01.2006"}}</p>
+                            <a 
+                            hx-get="/posts/{{objectIDToString .ID}}"
+                            hx-target="#modal-content"
+                            hx-trigger="click"
+                            onclick="toggleModal('view-modal', true)"
+                                class="text-primary-600 hover:text-primary-700 text-sm mt-2 inline-block cursor-pointer">
+                                Read more →
+                            </a>
+                        </div>
+                        {{end}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modals -->
+    {{template "modals/create" .}}
+    {{template "modals/view" .}}
+    {{template "modals/edit" .}}
+    {{template "modals/delete" .}}
+</body>
+</html>
+{{end}}

@@ -1,0 +1,18 @@
+{{define "modals/delete-content"}}
+<div id="delete-form-content">
+    <form hx-delete="/posts/{{objectIDToString .ID}}" 
+          hx-target="#delete-form-content"
+          hx-swap="outerHTML"
+          class="space-y-6">
+        <div class="text-center">
+            <p class="text-lg text-gray-700">Are you sure you want to delete {{.Title}}?</p>
+        </div>
+        <div class="flex justify-end gap-2">
+            <button type="button" onclick="toggleModal('delete-modal', false)" class="px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50">Cancel</button>
+            <button type="submit" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                Delete
+            </button>
+        </div>
+    </form>
+</div>
+{{end}} 

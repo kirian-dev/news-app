@@ -1,0 +1,45 @@
+{{define "modals/create"}}
+<div id="create-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center backdrop-blur-sm">
+    <div class="bg-white rounded-xl p-6 max-w-2xl w-full mx-4 shadow-2xl">
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="text-2xl font-semibold text-gray-800">Create Post</h3>
+            <button onclick="toggleModal('create-modal', false)" class="text-gray-400 hover:text-gray-600 transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+        <div id="create-form-content">
+            <form hx-post="/posts" 
+                  hx-target="#create-form-content"
+                  hx-swap="outerHTML"
+                  class="space-y-6">
+                <div>
+                    <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
+                    <input type="text" 
+                           id="title" 
+                           name="title" 
+                           required
+                           class="mt-1 block w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                           placeholder="Please enter the title">
+                </div>
+                <div>
+                    <label for="content" class="block text-sm font-medium text-gray-700">Content</label>
+                    <textarea id="content" 
+                              name="content" 
+                              required
+                              rows="6"
+                              class="mt-1 block w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
+                              placeholder="Please enter the content"></textarea>
+                </div>
+                <div class="flex justify-end gap-2">
+                    <button type="button" onclick="toggleModal('create-modal', false)" class="px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2">
+                        Create
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{{end}} 

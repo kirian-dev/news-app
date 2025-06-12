@@ -1,0 +1,46 @@
+{{define "post/posts-list"}}
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {{if .Posts}}
+            {{if gt (len .Posts) 0}}
+                {{template "post/post-item" .}}
+            {{else}}
+                <div class="col-span-full text-center text-gray-500 py-12 text-lg">
+                    No posts found
+                </div>
+            {{end}}
+        {{else}}
+            <div class="col-span-full text-center text-gray-500 py-12 text-lg">
+                No posts found
+            </div>
+        {{end}}
+    </div>
+    <!-- Pagination -->
+    {{if gt .TotalPages 1}}
+    <div class="flex justify-center items-center space-x-2 mt-8">
+        {{if gt .Page 1}}
+        <a hx-get="/?page={{subtract .Page 1}}&page_size={{.PageSize}}{{if .Search}}&search={{.Search}}{{end}}"
+           hx-target="#posts-list"
+           hx-push-url="true"
+           class="px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+            Previous
+        </a>
+        {{end}}
+        {{range $i := sequence 1 .TotalPages}}
+        <a hx-get="/?page={{$i}}&page_size={{$.PageSize}}{{if $.Search}}&search={{$.Search}}{{end}}"
+           hx-target="#posts-list"
+           hx-push-url="true"
+           class="px-4 py-2 border {{if eq $i $.Page}}bg-primary-500 text-white{{else}}border-gray-200 hover:bg-gray-50{{end}} rounded-lg cursor-pointer">
+            {{$i}}
+        </a>
+        {{end}}
+        {{if lt .Page .TotalPages}}
+        <a hx-get="/?page={{add .Page 1}}&page_size={{.PageSize}}{{if .Search}}&search={{.Search}}{{end}}"
+           hx-target="#posts-list"
+           hx-push-url="true"
+           class="px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+            Next
+        </a>
+        {{end}}
+    </div>
+    {{end}}
+{{end}} 
