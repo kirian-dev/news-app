@@ -6,7 +6,6 @@
 *.test
 *.out
 
-pkg/
 
 vendor/
 
