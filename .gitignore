@@ -28,6 +28,5 @@ vendor/
 *.bak
 *.old
 
-go.sum
 
 .env
