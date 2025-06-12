@@ -124,6 +124,10 @@ The application uses HTMX for dynamic content updates without writing JavaScript
 - Pagination without page reloads
 - Search functionality
 
+## Application view
+
+![Application screenshot](./assets/preview.png)
+
 ## Contributing
 
 1. Fork the repository
